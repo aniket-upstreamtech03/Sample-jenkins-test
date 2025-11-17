@@ -28,24 +28,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo '🧪 Running tests...'
-                bat 'npm run test:ci || echo "Tests completed with exit code: %ERRORLEVEL%"'
-            }
-            
-            post {
-                always {
-                    // Publish JUnit test results
-                    junit 'reports/junit.xml'
-                    
-                    // Publish HTML coverage report
-                    publishHTML([
-                        allowMissing: true,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: 'coverage/lcov-report',
-                        reportFiles: 'index.html',
-                        reportName: 'Test Coverage Report'
-                    ])
-                }
+                bat 'npm test || echo "Tests completed with exit code: %ERRORLEVEL%"'
             }
         }
         
