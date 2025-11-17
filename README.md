@@ -11,6 +11,7 @@ A Node.js API with Jenkins CI/CD pipeline and Monday.com integration.
 - Health checks and monitoring
 - Security best practices
 
+
 ## API Endpoints
 
 - `GET /` - API information
