@@ -2,6 +2,19 @@ const User = require('../models/userModel');
 const MondayMock = require('../monday-mock');
 
 class UserController {
+  constructor() {
+    // Bind methods to maintain 'this' context
+    this.getAllUsers = this.getAllUsers.bind(this);
+    this.getUserById = this.getUserById.bind(this);
+    this.createUser = this.createUser.bind(this);
+    this.updateUser = this.updateUser.bind(this);
+    this.deleteUser = this.deleteUser.bind(this);
+    this.getUserStats = this.getUserStats.bind(this);
+    this.searchUsers = this.searchUsers.bind(this);
+    this.getUsersByDepartment = this.getUsersByDepartment.bind(this);
+    this.getActiveUsers = this.getActiveUsers.bind(this);
+  }
+
   // Get all users with advanced filtering
   async getAllUsers(req, res) {
     try {
@@ -57,7 +70,7 @@ class UserController {
         }
       });
     } catch (error) {
-      await this.updateMondayCom('API_ERROR', `Failed to fetch users: ${error.message}`);
+      console.error('Error fetching users:', error.message);
       
       res.status(500).json({
         success: false,
@@ -88,7 +101,7 @@ class UserController {
         data: user
       });
     } catch (error) {
-      await this.updateMondayCom('API_ERROR', `Failed to fetch user ${req.params.id}`);
+      console.error('Error fetching user:', error.message);
       
       res.status(500).json({
         success: false,
@@ -148,7 +161,7 @@ class UserController {
         data: newUser
       });
     } catch (error) {
-      await this.updateMondayCom('USER_CREATION_FAILED', `Failed to create user: ${error.message}`);
+      console.error('Error creating user:', error.message);
       
       res.status(400).json({
         success: false,
@@ -194,7 +207,7 @@ class UserController {
         data: updatedUser
       });
     } catch (error) {
-      await this.updateMondayCom('USER_UPDATE_FAILED', `Failed to update user ${req.params.id}`);
+      console.error('Error updating user:', error.message);
       
       res.status(500).json({
         success: false,
@@ -226,7 +239,7 @@ class UserController {
         data: deletedUser
       });
     } catch (error) {
-      await this.updateMondayCom('USER_DELETION_FAILED', `Failed to delete user ${req.params.id}`);
+      console.error('Error deleting user:', error.message);
       
       res.status(500).json({
         success: false,
@@ -249,7 +262,7 @@ class UserController {
         generatedAt: new Date().toISOString()
       });
     } catch (error) {
-      await this.updateMondayCom('STATS_ERROR', 'Failed to fetch user statistics');
+      console.error('Error fetching user stats:', error.message);
       
       res.status(500).json({
         success: false,
@@ -307,6 +320,8 @@ class UserController {
         searchPerformedAt: new Date().toISOString()
       });
     } catch (error) {
+      console.error('Error searching users:', error.message);
+      
       res.status(500).json({
         success: false,
         error: 'Search failed',
@@ -330,6 +345,8 @@ class UserController {
         total: users.length
       });
     } catch (error) {
+      console.error('Error fetching department users:', error.message);
+      
       res.status(500).json({
         success: false,
         error: 'Failed to fetch department users',
@@ -352,6 +369,8 @@ class UserController {
         status: 'active'
       });
     } catch (error) {
+      console.error('Error fetching active users:', error.message);
+      
       res.status(500).json({
         success: false,
         error: 'Failed to fetch active users',
@@ -408,4 +427,7 @@ class UserController {
   }
 }
 
-module.exports = new UserController();
+// Create instance with proper binding
+const userController = new UserController();
+
+module.exports = userController;

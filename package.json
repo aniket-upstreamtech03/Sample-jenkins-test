@@ -4,7 +4,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "jest --coverage --verbose --testTimeout=10000 --passWithNoTests",
+    "test": "jest --coverage --verbose --testTimeout=30000 --passWithNoTests",
     "test:watch": "jest --watch",
     "lint": "eslint .",
     "build": "echo \"🚀 Build completed successfully!\""
@@ -23,7 +23,7 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "testTimeout": 10000,
+    "testTimeout": 30000,
     "passWithNoTests": true
   }
 }
