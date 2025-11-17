@@ -5,10 +5,6 @@ pipeline {
         nodejs "node"
     }
     
-    environment {
-        DEPLOY_FOLDER = 'C:\\deployed-apps\\sample-test-api'
-    }
-    
     stages {
         stage('Checkout') {
             steps {
@@ -23,33 +19,45 @@ pipeline {
             }
         }
         
-        stage('Build & Deploy') {
+        stage('Build') {
             steps {
-                echo '🚀 Building and deploying...'
-                script {
-                    // Deploy files
-                    bat "if not exist \"${DEPLOY_FOLDER}\" mkdir \"${DEPLOY_FOLDER}\""
-                    bat "xcopy . \"${DEPLOY_FOLDER}\" /Y /E /I /H"
-                    
-                    // Clean up any existing server
-                    bat 'taskkill /f /im node.exe > nul 2>&1 || echo "Cleanup completed"'
-                    
-                    // Try to start server (but don't fail if it doesn't work)
-                    bat "cd \"${DEPLOY_FOLDER}\" && start node app.js || echo \"Server start attempted\""
-                    
-                    echo '✅ Deployment completed'
-                }
+                bat 'npm run build'
+            }
+        }
+        
+        stage('Deploy Files') {
+            steps {
+                echo '📦 Copying files to deployment folder...'
+                bat 'if not exist "C:\\deployed-apps\\sample-test-api" mkdir "C:\\deployed-apps\\sample-test-api"'
+                bat 'xcopy . "C:\\deployed-apps\\sample-test-api" /Y /E /I'
+                echo '✅ Files copied successfully'
+            }
+        }
+        
+        stage('Create Start Script') {
+            steps {
+                echo '📜 Creating start script...'
+                bat '''
+                echo @echo off > "C:\\deployed-apps\\sample-test-api\\start.bat"
+                echo cd "C:\\deployed-apps\\sample-test-api" >> "C:\\deployed-apps\\sample-test-api\\start.bat"
+                echo node app.js >> "C:\\deployed-apps\\sample-test-api\\start.bat"
+                echo pause >> "C:\\deployed-apps\\sample-test-api\\start.bat"
+                '''
+                echo '✅ Start script created'
             }
         }
     }
     
     post {
         success {
-            echo '🎉 SUCCESS: Application deployed successfully!'
-            echo '📍 Location: C:\\deployed-apps\\sample-test-api'
-            echo '🚀 Start server: Double-click start-server.bat (in the folder)'
-            echo '🌐 Then visit: http://localhost:3000'
-            echo '💡 Server auto-start was attempted - check if running'
+            echo '🎉 SUCCESS: Pipeline completed!'
+            echo ' '
+            echo '📋 NEXT STEPS:'
+            echo '1. Go to: C:\\deployed-apps\\sample-test-api'
+            echo '2. Double-click: start.bat'
+            echo '3. Open: http://localhost:3000'
+            echo ' '
+            echo '💡 Server will start in a new window'
         }
     }
 }
