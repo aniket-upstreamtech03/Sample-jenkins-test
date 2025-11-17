@@ -51,7 +51,10 @@ pipeline {
                         bat 'taskkill /f /im node.exe > nul 2>&1 || echo "Server stopped"'
                         echo '✅ Quick health check passed'
                     } catch (Exception e) {
-                        echo "⚠️ Health check completed with notes"
+                        echo "⚠️ Health check completed with notes: ${e.getMessage()}"
+                    } finally {
+                        // Ensure cleanup in the stage itself
+                        bat 'taskkill /f /im node.exe > nul 2>&1 || echo "Stage cleanup completed"'
                     }
                 }
             }
@@ -61,7 +64,8 @@ pipeline {
     post {
         always {
             echo '🏁 Pipeline execution completed'
-            bat 'taskkill /f /im node.exe > nul 2>&1 || echo "Cleanup completed"'
+            // Use a more gentle cleanup approach
+            bat 'tasklist | findstr node.exe > nul && (taskkill /f /im node.exe > nul 2>&1 && echo "Node processes cleaned up" || echo "No node processes found") || echo "No node processes running"'
         }
         success {
             echo '🎉 Pipeline completed successfully!'
