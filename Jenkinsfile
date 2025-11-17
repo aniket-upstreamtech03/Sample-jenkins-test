@@ -22,21 +22,21 @@ pipeline {
             steps {
                 echo '📥 Installing Node.js dependencies...'
                 bat 'npm install'
-                
-                // Verify Jest is installed
-                bat 'npx jest --version || echo "Checking Jest installation"'
             }
         }
         
         stage('Run Tests') {
             steps {
                 echo '🧪 Running tests...'
-                bat 'npm test || echo "Tests completed with exit code: %ERRORLEVEL%"'
+                bat 'npm run test:ci || echo "Tests completed with exit code: %ERRORLEVEL%"'
             }
             
             post {
                 always {
+                    // Publish JUnit test results
                     junit 'reports/junit.xml'
+                    
+                    // Publish HTML coverage report
                     publishHTML([
                         allowMissing: true,
                         alwaysLinkToLastBuild: true,
