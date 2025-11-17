@@ -1,0 +1,41 @@
+{
+  "name": "sample-test",
+  "version": "1.0.0",
+  "description": "Node.js API with Jenkins CI/CD for Monday.com integration",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "jest --coverage --verbose",
+    "test:watch": "jest --watch",
+    "lint": "eslint .",
+    "build": "echo 'Build completed successfully!'",
+    "docker:build": "docker build -t sample-test-app .",
+    "docker:run": "docker run -p 3000:3000 sample-test-app"
+  },
+  "keywords": ["nodejs", "jenkins", "monday.com", "ci-cd", "api"],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "axios": "^1.4.0"
+  },
+  "devDependencies": {
+    "jest": "^29.6.1",
+    "supertest": "^6.3.3",
+    "nodemon": "^3.0.1",
+    "eslint": "^8.45.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!**/coverage/**"
+    ],
+    "testTimeout": 10000
+  }
+}
