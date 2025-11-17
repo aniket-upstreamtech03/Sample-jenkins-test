@@ -51,31 +51,23 @@ pipeline {
             }
         }
         
-        stage('Deploy Application') {
+        stage('Deploy & Start') {
             steps {
-                echo '🚀 Deploying application...'
+                echo '🚀 Deploying and starting application...'
                 script {
                     // Stop any running instance
                     bat 'taskkill /f /im node.exe > nul 2>&1 || echo "No previous server running"'
                     
-                    // Wait a moment for cleanup
+                    // Wait a moment
                     bat 'ping -n 3 127.0.0.1 > nul'
                     
-                    // Use the PowerShell command that works manually
+                    // Start the application using PowerShell (more reliable)
                     bat "powershell -Command \"Start-Process -WindowStyle Hidden -FilePath 'node' -ArgumentList 'app.js' -WorkingDirectory '${DEPLOY_FOLDER}'\""
                     
-                    echo '✅ Application deployment command executed'
-                }
-            }
-        }
-        
-        stage('Wait for Startup') {
-            steps {
-                echo '⏳ Waiting for application to start...'
-                script {
-                    // Wait for server to start up
-                    bat 'ping -n 10 127.0.0.1 > nul'
-                    echo '✅ Startup wait completed'
+                    // Wait for server to start
+                    bat 'ping -n 6 127.0.0.1 > nul'
+                    
+                    echo '✅ Application deployment initiated'
                 }
             }
         }
@@ -85,9 +77,8 @@ pipeline {
                 echo '🔍 Verifying deployment...'
                 script {
                     // Test if application is running
-                    bat 'curl http://localhost:3000/ || echo "Main endpoint check completed"'
                     bat 'curl http://localhost:3000/health || echo "Health endpoint check completed"'
-                    bat 'curl http://localhost:3000/api/users || echo "Users API check completed"'
+                    bat 'curl http://localhost:3000/ || echo "Main endpoint check completed"'
                     echo '✅ Deployment verification completed'
                 }
             }
@@ -99,15 +90,9 @@ pipeline {
             echo '🏁 Pipeline execution completed'
         }
         success {
-            echo '🎉 SUCCESS: CI/CD Pipeline Complete! 🚀'
-            echo ' '
-            echo '📋 DEPLOYMENT SUMMARY:'
-            echo '✅ Application deployed to: C:\\deployed-apps\\sample-test-api'
-            echo '🌐 Application running at: http://localhost:3000'
-            echo '📊 Health check: http://localhost:3000/health'
-            echo '👥 Users API: http://localhost:3000/api/users'
-            echo ' '
-            echo '🎊 Your CI/CD pipeline is now fully automated!'
+            echo '🎉 SUCCESS: CI/CD Pipeline Complete!'
+            echo '📋 Application should be running at: http://localhost:3000'
+            echo '📍 Deployment location: C:\\deployed-apps\\sample-test-api'
         }
         failure {
             echo '❌ Pipeline failed - check stage logs above'
