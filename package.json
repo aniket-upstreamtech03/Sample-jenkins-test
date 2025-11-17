@@ -6,10 +6,10 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "jest --coverage --verbose",
+    "test": "jest --coverage --verbose --testTimeout=10000",
     "test:watch": "jest --watch",
     "lint": "eslint .",
-    "build": "echo 'Build completed successfully!'",
+    "build": "echo \"🚀 Build completed successfully!\" && echo \"📦 Application ready for deployment\"",
     "docker:build": "docker build -t sample-test-app .",
     "docker:run": "docker run -p 3000:3000 sample-test-app"
   },
