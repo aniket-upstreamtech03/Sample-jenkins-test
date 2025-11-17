@@ -10,7 +10,7 @@ A Node.js API with Jenkins CI/CD pipeline and Monday.com integration.
 - Comprehensive test suite with Jest
 - Health checks and monitoring
 - Security best practices
-- test
+
 
 ## API Endpoints
 
