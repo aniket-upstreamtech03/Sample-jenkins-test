@@ -37,13 +37,25 @@ pipeline {
         stage('Stop Existing Server') {
             steps {
                 echo '🛑 Stopping any existing server instances...'
-                bat '''
-                for /f "tokens=5" %%a in ('netstat -aon ^| findstr :3000 ^| findstr LISTENING') do (
-                    echo Found process %%a on port 3000, stopping it...
-                    taskkill /F /PID %%a 2>nul
-                )
-                '''
-                echo '✅ Previous instances stopped'
+                script {
+                    bat '''
+                    @echo off
+                    netstat -aon | findstr :3000 | findstr LISTENING > temp_pids.txt 2>nul
+                    if %ERRORLEVEL% EQU 0 (
+                        for /f "tokens=5" %%a in (temp_pids.txt) do (
+                            echo Found process %%a on port 3000, stopping it...
+                            taskkill /F /PID %%a 2>nul
+                        )
+                        del temp_pids.txt
+                        echo Previous server stopped
+                    ) else (
+                        echo No existing server found on port 3000
+                        if exist temp_pids.txt del temp_pids.txt
+                    )
+                    exit 0
+                    '''
+                }
+                echo '✅ Previous instances checked'
             }
         }
         
