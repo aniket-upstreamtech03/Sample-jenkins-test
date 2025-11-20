@@ -109,7 +109,7 @@ pipeline {
                     ${DOCKER_IMAGE_NAME}:latest
                 """
                 echo '⏳ Waiting for container to initialize...'
-                bat 'timeout /t 5 /nobreak >nul'
+                bat 'timeout /t 5 /nobreak'
                 echo '✅ Container deployed successfully'
             }
         }
@@ -130,7 +130,7 @@ pipeline {
                 script {
                     bat """
                     @echo off
-                    timeout /t 3 /nobreak >nul
+                    timeout /t 3 /nobreak
                     echo Testing endpoint: http://localhost:${HOST_PORT}/health
                     curl -f http://localhost:${HOST_PORT}/health && (
                         echo ✅ Health check PASSED!
