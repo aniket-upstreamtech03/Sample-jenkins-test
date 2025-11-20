@@ -1,8 +1,12 @@
 version: '3.8'
 
 services:
-  web:
-    build: .
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: sample-test-api:latest
+    container_name: sample-test-api-container
     ports:
       - "3000:3000"
     environment:
@@ -10,17 +14,19 @@ services:
       - PORT=3000
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "node", "health-check.js"]
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+    networks:
+      - app-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
-  # Example: Add MongoDB if needed later
-  # mongo:
-  #   image: mongo:latest
-  #   ports:
-  #     - "27017:27017"
-  #   environment:
-  #     - MONGO_INITDB_ROOT_USERNAME=admin
-  #     - MONGO_INITDB_ROOT_PASSWORD=password
+networks:
+  app-network:
+    driver: bridge

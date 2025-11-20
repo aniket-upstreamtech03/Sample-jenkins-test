@@ -5,105 +5,185 @@ pipeline {
         nodejs "node"
     }
     
+    environment {
+        // Docker configuration
+        DOCKER_IMAGE_NAME = "sample-test-api"
+        DOCKER_IMAGE_TAG = "${BUILD_NUMBER}"
+        DOCKER_CONTAINER_NAME = "sample-test-api-container"
+        DOCKER_PORT = "3000"
+        HOST_PORT = "3000"
+    }
+    
     stages {
         stage('Checkout') {
             steps {
+                echo '📥 Checking out code from GitHub...'
                 checkout scm
+                echo '✅ Code checkout completed'
             }
         }
         
-        stage('Install & Test') {
+        stage('Install Dependencies & Test') {
             steps {
+                echo '📦 Installing dependencies...'
                 bat 'npm install'
+                echo '🧪 Running tests...'
                 bat 'npm test'
+                echo '✅ Dependencies installed and tests passed'
             }
         }
         
-        stage('Build') {
+        stage('Build Application') {
             steps {
+                echo '🔨 Building application...'
                 bat 'npm run build'
+                echo '✅ Build completed successfully'
             }
         }
         
-        stage('Deploy Files') {
+        stage('Stop & Remove Old Docker Container') {
             steps {
-                echo '📦 Copying files to deployment folder...'
-                bat 'if not exist "C:\\deployed-apps\\sample-test-api" mkdir "C:\\deployed-apps\\sample-test-api"'
-                bat 'xcopy . "C:\\deployed-apps\\sample-test-api" /Y /E /I'
-                echo '✅ Files copied successfully'
-            }
-        }
-        
-        stage('Stop Existing Server') {
-            steps {
-                echo '🛑 Stopping any existing server instances...'
+                echo '🛑 Stopping and removing old Docker container...'
                 script {
-                    bat '''
+                    bat """
                     @echo off
-                    netstat -aon | findstr :3000 | findstr LISTENING > temp_pids.txt 2>nul
-                    if %ERRORLEVEL% EQU 0 (
-                        for /f "tokens=5" %%a in (temp_pids.txt) do (
-                            echo Found process %%a on port 3000, stopping it...
-                            taskkill /F /PID %%a 2>nul
-                        )
-                        del temp_pids.txt
-                        echo Previous server stopped
+                    echo Checking for existing container: ${DOCKER_CONTAINER_NAME}
+                    docker ps -a -q --filter "name=${DOCKER_CONTAINER_NAME}" > container_id.txt
+                    set /p CONTAINER_ID=<container_id.txt
+                    if defined CONTAINER_ID (
+                        echo Found existing container, stopping and removing...
+                        docker stop ${DOCKER_CONTAINER_NAME} 2>nul || echo Container already stopped
+                        docker rm ${DOCKER_CONTAINER_NAME} 2>nul || echo Container already removed
+                        echo ✅ Old container cleaned up
                     ) else (
-                        echo No existing server found on port 3000
-                        if exist temp_pids.txt del temp_pids.txt
+                        echo No existing container found
+                    )
+                    del container_id.txt 2>nul
+                    exit 0
+                    """
+                }
+            }
+        }
+        
+        stage('Remove Old Docker Image') {
+            steps {
+                echo '🗑️ Removing old Docker images...'
+                script {
+                    bat """
+                    @echo off
+                    echo Removing old images for ${DOCKER_IMAGE_NAME}
+                    docker images ${DOCKER_IMAGE_NAME} -q | findstr . >nul && (
+                        for /f %%i in ('docker images ${DOCKER_IMAGE_NAME} -q') do (
+                            docker rmi -f %%i 2>nul || echo Image might be in use
+                        )
+                        echo Old images removed
+                    ) || (
+                        echo No old images found
                     )
                     exit 0
-                    '''
+                    """
                 }
-                echo '✅ Previous instances checked'
             }
         }
         
-        stage('Start Server') {
+        stage('Build Docker Image') {
             steps {
-                echo '🚀 Starting server automatically...'
-                bat '''
-                cd "C:\\deployed-apps\\sample-test-api"
-                start /B node app.js
-                '''
-                echo '⏳ Waiting for server to initialize...'
-                sleep 3
-                echo '✅ Server started successfully!'
+                echo '🐳 Building Docker image...'
+                bat """
+                docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} -t ${DOCKER_IMAGE_NAME}:latest .
+                """
+                echo '✅ Docker image built successfully'
+                bat "docker images ${DOCKER_IMAGE_NAME}"
+            }
+        }
+        
+        stage('Deploy Docker Container') {
+            steps {
+                echo '🚀 Deploying Docker container...'
+                bat """
+                docker run -d ^
+                    --name ${DOCKER_CONTAINER_NAME} ^
+                    -p ${HOST_PORT}:${DOCKER_PORT} ^
+                    -e NODE_ENV=production ^
+                    --restart unless-stopped ^
+                    ${DOCKER_IMAGE_NAME}:latest
+                """
+                echo '⏳ Waiting for container to initialize...'
+                bat 'timeout /t 5 /nobreak >nul'
+                echo '✅ Container deployed successfully'
+            }
+        }
+        
+        stage('Verify Deployment') {
+            steps {
+                echo '🔍 Verifying Docker container status...'
+                bat "docker ps -a --filter name=${DOCKER_CONTAINER_NAME}"
+                echo ' '
+                echo '📊 Container logs (last 20 lines):'
+                bat "docker logs --tail 20 ${DOCKER_CONTAINER_NAME}"
             }
         }
         
         stage('Health Check') {
             steps {
                 echo '🏥 Performing health check...'
-                bat '''
-                timeout /t 2 /nobreak >nul
-                curl -s http://localhost:3000 >nul 2>&1 && (
-                    echo Health check passed!
-                ) || (
-                    echo Health check completed
-                )
-                '''
-                echo '✅ Application is ready'
+                script {
+                    bat """
+                    @echo off
+                    timeout /t 3 /nobreak >nul
+                    echo Testing endpoint: http://localhost:${HOST_PORT}/health
+                    curl -f http://localhost:${HOST_PORT}/health && (
+                        echo ✅ Health check PASSED!
+                        exit 0
+                    ) || (
+                        echo ⚠️ Health check endpoint not responding
+                        echo Checking if container is running...
+                        docker ps --filter name=${DOCKER_CONTAINER_NAME}
+                        exit 1
+                    )
+                    """
+                }
             }
         }
     }
     
     post {
         success {
-            echo '🎉 SUCCESS: Pipeline completed!'
-            echo ' '
-            echo '✅ Server is now running automatically at: http://localhost:3000'
+            echo '🎉 SUCCESS: Docker Deployment Pipeline Completed!'
+            echo '═══════════════════════════════════════════════════'
+            echo '✅ Application deployed in Docker container'
             echo ' '
             echo '📋 Deployment Details:'
-            echo '   - Location: C:\\deployed-apps\\sample-test-api'
-            echo '   - Port: 3000'
-            echo '   - Status: Running in background'
+            echo "   🐳 Container Name: ${DOCKER_CONTAINER_NAME}"
+            echo "   🏷️  Image: ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+            echo "   🌐 URL: http://localhost:${HOST_PORT}"
+            echo "   🏥 Health Check: http://localhost:${HOST_PORT}/health"
+            echo "   📊 API Docs: http://localhost:${HOST_PORT}/"
             echo ' '
-            echo '💡 No manual action required - server is already running!'
+            echo '🔧 Useful Docker Commands:'
+            echo "   View logs: docker logs -f ${DOCKER_CONTAINER_NAME}"
+            echo "   Stop container: docker stop ${DOCKER_CONTAINER_NAME}"
+            echo "   Restart container: docker restart ${DOCKER_CONTAINER_NAME}"
+            echo "   Shell access: docker exec -it ${DOCKER_CONTAINER_NAME} sh"
+            echo ' '
+            echo '💡 Container is running in background with auto-restart enabled'
+            echo '═══════════════════════════════════════════════════'
         }
         failure {
             echo '❌ FAILURE: Pipeline failed!'
-            echo 'Please check the logs above for errors.'
+            echo '═══════════════════════════════════════════════════'
+            echo 'Troubleshooting steps:'
+            echo '1. Check Jenkins console output above for errors'
+            echo '2. Verify Docker is running: docker --version'
+            echo "3. Check container logs: docker logs ${DOCKER_CONTAINER_NAME}"
+            echo "4. Check container status: docker ps -a --filter name=${DOCKER_CONTAINER_NAME}"
+            echo '═══════════════════════════════════════════════════'
+        }
+        always {
+            echo ' '
+            echo '📊 Docker System Info:'
+            bat 'docker ps -a --filter name=sample-test-api'
+            bat 'docker images sample-test-api'
         }
     }
 }
