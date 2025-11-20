@@ -49,12 +49,4 @@ describe('Sample Test API', () => {
       expect(response.body).toHaveProperty('error', 'Route not found');
     });
   });
-
-  // Add afterAll to close server
-  afterAll(async () => {
-    // Close the server after tests
-    if (app.server) {
-      await new Promise((resolve) => app.server.close(resolve));
-    }
-  });
 });
