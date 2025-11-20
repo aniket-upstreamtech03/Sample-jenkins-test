@@ -7,9 +7,9 @@ pipeline {
     
     environment {
         // Docker configuration
-        DOCKER_IMAGE_NAME = "Sample-jenkins-test"
+        DOCKER_IMAGE_NAME = "sample-jenkins-test"
         DOCKER_IMAGE_TAG = "${BUILD_NUMBER}"
-        DOCKER_CONTAINER_NAME = "Sample-jenkins-test"
+        DOCKER_CONTAINER_NAME = "sample-jenkins-test"
         DOCKER_PORT = "3000"
         HOST_PORT = "3000"
     }
@@ -182,8 +182,8 @@ pipeline {
         always {
             echo ' '
             echo '📊 Docker System Info:'
-            bat 'docker ps -a --filter name=sample-test-api'
-            bat 'docker images sample-test-api'
+            bat "docker ps -a --filter name=${DOCKER_CONTAINER_NAME}"
+            bat "docker images ${DOCKER_IMAGE_NAME}"
         }
     }
 }
