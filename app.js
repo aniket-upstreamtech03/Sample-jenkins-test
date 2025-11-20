@@ -3,15 +3,21 @@ const cors = require('cors');
 const helmet = require('helmet');
 
 const userRoutes = require('./routes/users');
+const contactRoutes = require('./routes/contact');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false, // Allow inline scripts for the contact form
+}));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files (HTML, CSS, JS)
+app.use(express.static('.'));
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -33,6 +39,7 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.use('/api/users', userRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -42,7 +49,9 @@ app.get('/', (req, res) => {
     endpoints: {
       health: '/health',
       users: '/api/users',
-      'users-stats': '/api/users/stats/count'
+      'users-stats': '/api/users/stats/count',
+      contact: '/api/contact',
+      'contact-stats': '/api/contact/stats'
     },
     environment: process.env.NODE_ENV || 'development'
   });
@@ -57,6 +66,7 @@ app.use('*', (req, res) => {
     availableEndpoints: {
       health: 'GET /health',
       users: 'GET /api/users',
+      contact: 'POST /api/contact',
       root: 'GET /'
     }
   });
