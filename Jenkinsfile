@@ -7,9 +7,9 @@ pipeline {
     
     environment {
         // Docker configuration
-        DOCKER_IMAGE_NAME = "sample-test-api"
+        DOCKER_IMAGE_NAME = "Sample-jenkins-test"
         DOCKER_IMAGE_TAG = "${BUILD_NUMBER}"
-        DOCKER_CONTAINER_NAME = "sample-test-api-container"
+        DOCKER_CONTAINER_NAME = "Sample-jenkins-test"
         DOCKER_PORT = "3000"
         HOST_PORT = "3000"
     }
