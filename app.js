@@ -51,7 +51,8 @@ app.get('/', (req, res) => {
       users: '/api/users',
       'users-stats': '/api/users/stats/count',
       contact: '/api/contact',
-      'contact-stats': '/api/contact/stats'
+      'contact-stats': '/api/contact/stats',
+      'contact-UI': '/contact.html'
     },
     environment: process.env.NODE_ENV || 'development'
   });
