@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - Sample Test API</title>
+    <title>About & Contact - Upstream Technologies</title>
     <style>
         * {
             margin: 0;
@@ -12,267 +12,523 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background: #1a1a2e;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            padding: 20px;
         }
 
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            max-width: 600px;
-            width: 100%;
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 28px;
-        }
-
-        .subtitle {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: 500;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
+        .logo-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 5px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: border-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
         }
 
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #667eea;
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
         }
 
-        textarea {
-            resize: vertical;
-            min-height: 120px;
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
         }
 
-        .required {
-            color: #e74c3c;
+        .nav-links a:hover {
+            color: #667eea;
         }
 
-        button {
+        /* Hero Section */
+        .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 14px 30px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
+            padding: 80px 20px;
+            text-align: center;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .message {
-            padding: 15px;
-            border-radius: 5px;
+        .hero h1 {
+            font-size: 48px;
             margin-bottom: 20px;
-            display: none;
+            font-weight: 700;
         }
 
-        .message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .hero p {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
         }
 
-        .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        /* About Section */
+        .about-section {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 20px;
         }
 
-        .message.show {
-            display: block;
-            animation: slideIn 0.3s ease-out;
+        .about-section h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            color: #1a1a2e;
+            text-align: center;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 50px;
         }
 
-        .info-box {
-            background: #e7f3ff;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 30px;
+        .about-text {
+            font-size: 18px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+        }
+
+        .about-features {
+            display: grid;
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
             border-left: 4px solid #667eea;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .info-box h3 {
-            color: #333;
+        .feature-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
             margin-bottom: 10px;
-            font-size: 16px;
+            color: #1a1a2e;
         }
 
-        .info-box ul {
-            list-style: none;
-            font-size: 14px;
+        .feature-card p {
+            color: #666;
+            font-size: 15px;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: #f8f9fa;
+            padding: 60px 20px;
+            margin: 80px 0;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .stat-item p {
+            font-size: 18px;
             color: #555;
         }
 
-        .info-box li {
-            margin-bottom: 5px;
-            padding-left: 20px;
-            position: relative;
+        /* Contact Section */
+        .contact-section {
+            background: #1a1a2e;
+            color: white;
+            padding: 80px 20px;
         }
 
-        .info-box li:before {
-            content: "→";
-            position: absolute;
-            left: 0;
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contact-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .contact-subtitle {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 60px;
+            opacity: 0.9;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .contact-info-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-info-box h3 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .contact-details h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
             color: #667eea;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-details p {
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .contact-details a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-details a:hover {
+            color: #667eea;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fff;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .social-icon:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: translateY(-5px);
+        }
+
+        /* Footer */
+        footer {
+            background: #0f0f1e;
+            color: #999;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Contact Us</h1>
-        <h4>We value your feedback and inquiries #updated by </h4>
-
-        <p class="subtitle">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
-
-        <div id="messageBox" class="message"></div>
-
-        <form id="contactForm">
-            <div class="form-group">
-                <label for="name">Name <span class="required">*</span></label>
-                <input type="text" id="name" name="name" required placeholder="Your full name">
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email <span class="required">*</span></label>
-                <input type="email" id="email" name="email" required placeholder="your.email@example.com">
-            </div>
-
-            <div class="form-group">
-                <label for="subject">Subject</label>
-                <input type="text" id="subject" name="subject" placeholder="What is this about?">
-            </div>
-
-            <div class="form-group">
-                <label for="message">Message <span class="required">*</span></label>
-                <textarea id="message" name="message" required placeholder="Tell us more..."></textarea>
-            </div>
-
-            <button type="submit" id="submitBtn">Send Message</button>
-        </form>
-
-        <div class="info-box">
-            <h3>API Endpoints Available:</h3>
-            <ul>
-                <li><strong>POST</strong> /api/contact - Submit contact form</li>
-                <li><strong>GET</strong> /api/contact - Get all contacts</li>
-                <li><strong>GET</strong> /api/contact/stats - Get statistics</li>
-                <li><strong>GET</strong> /api/contact/:id - Get specific contact</li>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">U</span>
+                <span>upstream</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
         </div>
-    </div>
+    </nav>
 
-    <script>
-        const form = document.getElementById('contactForm');
-        const messageBox = document.getElementById('messageBox');
-        const submitBtn = document.getElementById('submitBtn');
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Accelerate Enterprise Value with monday.com</h1>
+        <p>upstream is a global digital consultancy dedicated to helping businesses unlock their full potential by optimising workflows, automating complex processes, and scaling operations with monday.com Work OS.</p>
+    </section>
 
-        // Change this to your API URL (default is localhost:3000)
-        const API_URL = 'http://localhost:3000/api/contact';
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <h2>About upstream</h2>
+        
+        <div class="about-content">
+            <div class="about-text">
+                <p>
+                    <strong>upstream</strong> is a monday.com Platinum Partner and global digital consultancy dedicated to helping businesses unlock 
+                    their full potential by optimising workflows, automating complex processes, and scaling operations with confidence.
+                </p>
+                <p>
+                    We specialize in designing and implementing workflow management solutions using monday.com Work OS. 
+                    Our expertise enables companies to track their projects, processes, and even CI/CD pipelines through 
+                    intuitive monday.com boards, enabling organizations to achieve 40% faster time-to-value.
+                </p>
+                <p>
+                    Through innovative monday.com implementations and cutting-edge automation strategies, upstream empowers 
+                    organisations to achieve sustainable growth and stay ahead in an ever-evolving 
+                    digital landscape.
+                </p>
+            </div>
 
-        function showMessage(text, type) {
-            messageBox.textContent = text;
-            messageBox.className = `message ${type} show`;
-            
-            setTimeout(() => {
-                messageBox.classList.remove('show');
-            }, 5000);
-        }
+            <div id="services" class="about-features">
+                <div class="feature-card">
+                    <h3>📊 Workflow Design</h3>
+                    <p>Custom monday.com board designs for project tracking, task management, and process automation</p>
+                </div>
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending...';
+                <div class="feature-card">
+                    <h3>🔄 Process Automation</h3>
+                    <p>Intelligent automations connecting monday.com with your existing tools and systems</p>
+                </div>
 
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                subject: document.getElementById('subject').value,
-                message: document.getElementById('message').value
-            };
+                <div class="feature-card">
+                    <h3>🎯 CI/CD Tracking</h3>
+                    <p>Visual dashboards to monitor deployment pipelines, build statuses, and release management in monday.com</p>
+                </div>
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
+                <div class="feature-card">
+                    <h3>🔗 Integrations</h3>
+                    <p>Seamless connections between monday.com and tools like Jira, GitHub, Jenkins, and more</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                const data = await response.json();
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stat-item">
+                <h3>1500+</h3>
+                <p>Businesses Served Globally</p>
+            </div>
+            <div class="stat-item">
+                <h3>40%</h3>
+                <p>Faster Time-to-Value</p>
+            </div>
+            <div class="stat-item">
+                <h3>60%</h3>
+                <p>Reduction in Deployment Time</p>
+            </div>
+            <div class="stat-item">
+                <h3>99.9%</h3>
+                <p>Uptime Reliability</p>
+            </div>
+        </div>
+    </section>
 
-                if (response.ok) {
-                    showMessage(data.message || 'Message sent successfully!', 'success');
-                    form.reset();
-                } else {
-                    showMessage(data.message || 'Failed to send message. Please try again.', 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showMessage('Network error. Please make sure the API server is running on port 3000.', 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Send Message';
-            }
-        });
-    </script>
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="contact-container">
+            <h2>Contact Us</h2>
+            <p class="contact-subtitle">
+                Recognised. Trusted. Leading. Global.<br>
+                Get in touch with upstream. We're here to help accelerate your enterprise value through innovative monday.com workflow solutions.
+            </p>
+
+            <div class="contact-content">
+                <div class="contact-info-box">
+                    <h3>Get In Touch</h3>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-details">
+                            <h4>Email</h4>
+                            <p><a href="mailto:contact@upstreamtech.io">contact@upstreamtech.io</a></p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">📱</div>
+                        <div class="contact-details">
+                            <h4>Phone</h4>
+                            <p><a href="tel:+919876543210">+91 98765 43210</a></p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div class="contact-details">
+                            <h4>Global Presence</h4>
+                            <p>India | Australia | New Zealand | United Kingdom</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">⏰</div>
+                        <div class="contact-details">
+                            <h4>Working Hours</h4>
+                            <p>Monday - Friday: 9:00 AM - 6:00 PM IST</p>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/company/upstreamtech" class="social-icon" target="_blank" title="LinkedIn">🔗</a>
+                        <a href="https://www.github.com/aniket-upstreamtech03" class="social-icon" target="_blank" title="GitHub">💻</a>
+                        <a href="https://www.twitter.com/upstreamtech" class="social-icon" target="_blank" title="Twitter">🐦</a>
+                        <a href="mailto:contact@upstreamtech.io" class="social-icon" title="Email">✉️</a>
+                    </div>
+                </div>
+
+                <div class="contact-info-box">
+                    <h3>Our Expertise</h3>
+                    <p style="margin-bottom: 20px; font-size: 16px; line-height: 1.8;">
+                        <strong>upstream</strong> delivers enterprise-grade monday.com solutions with proven expertise 
+                        across multiple industries including manufacturing, IT services, BFSI, and media.
+                    </p>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">🏆</div>
+                        <div class="contact-details">
+                            <h4>Partnerships</h4>
+                            <p>monday.com Platinum Partner | Advanced Delivery Partner</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">🔧</div>
+                        <div class="contact-details">
+                            <h4>Specialization</h4>
+                            <p>monday.com Work OS, Workflow Automation, Integration Solutions</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">🌐</div>
+                        <div class="contact-details">
+                            <h4>Website</h4>
+                            <p><a href="https://upstreamtech.in" target="_blank">upstreamtech.in</a></p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">📊</div>
+                        <div class="contact-details">
+                            <h4>Schedule Consultation</h4>
+                            <p><a href="https://calendly.com/upstreamtech" target="_blank">Book a 30-min Strategy Call</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 upstream. All rights reserved. | <a href="https://upstreamtech.in">upstreamtech.in</a></p>
+        <p style="margin-top: 10px; font-size: 12px;">monday.com Platinum Partner | Optimising workflows | Automating processes | Scaling operations</p>
+        <p style="margin-top: 5px; font-size: 12px;">Powered by monday.com Work OS</p>
+    </footer>
 </body>
 </html>
