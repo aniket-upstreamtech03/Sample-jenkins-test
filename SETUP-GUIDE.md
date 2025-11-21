@@ -1,6 +1,6 @@
 # 🚀 Quick Setup Guide - GitHub + Jenkins + Docker Automation
 
-## Prerequisites test
+## Prerequisites 
 
 - ✅ Docker installed on Jenkins server
 - ✅ Jenkins installed with plugins: Git, NodeJS, Pipeline
