@@ -10,8 +10,8 @@ pipeline {
         DOCKER_IMAGE_NAME = "sample-jenkins-test"
         DOCKER_IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKER_CONTAINER_NAME = "sample-jenkins-test"
-        DOCKER_PORT = "3000"
-        HOST_PORT = "3000"
+        DOCKER_PORT = "3005"
+        HOST_PORT = "3005"
     }
     
     stages {
