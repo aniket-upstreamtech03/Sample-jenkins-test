@@ -6,7 +6,7 @@ const userRoutes = require('./routes/users');
 const contactRoutes = require('./routes/contact');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3005;
 
 // Middleware
 app.use(helmet({
